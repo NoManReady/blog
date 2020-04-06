@@ -1,5 +1,5 @@
 <template>
-  <div class="app-shuyue">
+  <div class="app-blog">
     <router-view/>
   </div>
 </template>
