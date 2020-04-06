@@ -1,0 +1,2 @@
+(window["webpackJsonp_blog"]=window["webpackJsonp_blog"]||[]).push([["chunk-2d21a3d2"],{bb51:function(e,n,o){"use strict";o.r(n);var t=function(){var e=this,n=e.$createElement,o=e._self._c||n;return o("div",{staticClass:"home tc"},[e._v("welcome to NoManReady's Blog!")])},l=[],a={name:"Home"},c=a,s=o("2877"),u=Object(s["a"])(c,t,l,!1,null,null,null);n["default"]=u.exports}}]);
+//# sourceMappingURL=chunk-2d21a3d2.cec1a7b3.js.map
