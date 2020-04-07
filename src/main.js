@@ -9,7 +9,7 @@ Vue.config.productionTip = false;
 let instance = null;
 
 export async function bootstrap(props) {
-  
+
 }
 
 export async function mount({ data = {} } = {}) {
@@ -21,8 +21,10 @@ export async function mount({ data = {} } = {}) {
 }
 
 export async function unmount() {
-  instance.$destroy();
-  instance = null;
+  if (instance) {
+    instance.$destroy();
+    instance = null;
+  }
 }
 
 // 单独开发环境

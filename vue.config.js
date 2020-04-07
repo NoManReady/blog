@@ -10,9 +10,9 @@ module.exports = {
   assetsDir: "static",
   filenameHashing: true,
   devServer: {
-    host: "localhost",
+    host: "127.0.0.1",
     disableHostCheck: true,
-    port: 9004,
+    port: 9003,
     headers: {
       "Access-Control-Allow-Origin": "*"
     }
