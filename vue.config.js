@@ -1,4 +1,5 @@
 const path = require("path");
+const pxtorem = require('postcss-pxtorem')
 const { name } = require("./package");
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -39,5 +40,23 @@ module.exports = {
       libraryTarget: "umd",
       jsonpFunction: `webpackJsonp_${name}`
     }
+  },
+  css: {
+    loaderOptions: {
+      // 给 sass-loader 传递选项
+      scss: {
+        // @/ 是 src/ 的别名
+        // 注意：在 sass-loader v7 中，这个选项名是 "data"
+        prependData: ``,
+      },
+      postcss: {
+        plugins: [
+          pxtorem({
+            rootValue: 37.5,
+            propList: ['*']
+          })
+        ]
+      }
+    },
   }
 };

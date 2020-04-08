@@ -4,6 +4,7 @@ import "./public_path";
 import router from "./router";
 import store from "./store";
 import '@/style/index.scss'
+
 Vue.config.productionTip = false;
 
 let instance = null;
@@ -22,6 +23,8 @@ export async function mount({ data = {} } = {}) {
 
 export async function unmount() {
   if (instance) {
+    const htmlDom = document.getElementsByTagName('html')[0];
+    htmlDom.style.fontSize = window.originSize;
     instance.$destroy();
     instance = null;
   }
