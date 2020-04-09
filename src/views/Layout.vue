@@ -1,13 +1,11 @@
 <template>
   <div class="layout">
-    <router-view :class="{'has-tabbar':showTab}" class="layout-inner"></router-view>
+    <transition :name="directionClass">
+      <router-view :class="{'has-tabbar':showTab}" class="layout-inner"></router-view>
+    </transition>
     <template v-if="showTab">
       <van-tabbar v-model="tabbarModel">
-        <van-tabbar-item :to="{name:'Star'}" icon="star-o" name="star">收藏</van-tabbar-item>
-        <van-tabbar-item :to="{name:'Like'}" icon="like-o" name="like">喜欢</van-tabbar-item>
-        <van-tabbar-item :to="{name:'Home'}" icon="home-o" name="home">首页</van-tabbar-item>
-        <van-tabbar-item :to="{name:'Fire'}" icon="fire-o" name="fire">热门</van-tabbar-item>
-        <van-tabbar-item :to="{name:'Setting'}" icon="setting-o" name="setting">设置</van-tabbar-item>
+        <van-tabbar-item :key="tab.name" @click.native="_onClickTab(tab)" v-bind="tab" v-for="tab in tabbars.filter(t=>t.name!=='home'||(t.name==='home'&&!is_qiankun))">{{tab.label}}</van-tabbar-item>
       </van-tabbar>
     </template>
   </div>
@@ -22,15 +20,53 @@ export default {
     [TabbarItem.name]: TabbarItem
   },
   data() {
-    return {}
+    return {
+      tabbars: [
+        {
+          icon: 'star-o',
+          name: 'star',
+          label: '收藏',
+          link: { name: 'Star' }
+        },
+        {
+          icon: 'like-o',
+          name: 'like',
+          label: '喜欢',
+          link: { name: 'Like' }
+        },
+        {
+          icon: 'home-o',
+          name: 'home',
+          label: '首页',
+          link: { name: 'Home' }
+        },
+        {
+          icon: 'fire-o',
+          name: 'fire',
+          label: '热门',
+          link: { name: 'Fire' }
+        },
+        {
+          icon: 'setting-o',
+          name: 'setting',
+          label: '设置',
+          link: { name: 'Fire' }
+        }
+      ]
+    }
   },
   computed: {
-    ...mapGetters(['showTab']),
+    ...mapGetters(['showTab', 'directionClass', 'is_qiankun']),
     tabbarModel: {
       get() {
-        return this.$route.query.index || 'star'
+        return this.$route.name.toLowerCase() || 'star'
       },
       set() {}
+    }
+  },
+  methods: {
+    _onClickTab({ link }) {
+      this.$router.replace(link)
     }
   }
 }
@@ -43,12 +79,13 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
+  overflow: hidden;
   .has-tabbar {
     padding-bottom: 60px;
   }
   &-inner {
-    flex: 1;
+    position: absolute;
+    height: 100%;
     width: 100%;
   }
 }

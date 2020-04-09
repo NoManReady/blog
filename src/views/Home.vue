@@ -1,84 +1,104 @@
 <template>
   <div class="home tc">
-    <van-swipe :autoplay="3000" indicator-color="white">
-      <van-swipe-item :key="img.src" v-for="img in banners">
-        <div class="swipe-wrap">
-          <img :src="img.src" />
-        </div>
-      </van-swipe-item>
-    </van-swipe>
+    <banner-slide :auto-roll="true" :images="banners" />
     <van-divider class="home-diveider">
       <span class="c-warning">快捷工具</span>
     </van-divider>
     <van-grid class="home-grid">
-      <van-grid-item :key="item.text" v-bind="item" v-for="item in grids" />
+      <van-grid-item :key="item.text" @click.native="_onClick(item)" v-bind="item" v-for="item in grids" />
     </van-grid>
   </div>
 </template>
 
 <script>
-import { Swipe, SwipeItem, Grid, GridItem, Divider } from 'vant'
+import { Grid, GridItem, Divider } from 'vant'
+import Banner from '@/components/Banner'
 export default {
   name: 'Home',
   components: {
-    [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
     [Grid.name]: Grid,
     [GridItem.name]: GridItem,
-    [Divider.name]: Divider
+    [Divider.name]: Divider,
+    [Banner.name]: Banner
   },
   data() {
     return {
       banners: [
         {
           desc: '',
-          src: require('@/assets/banner-1.jpg')
+          url: '',
+          pic: require('@/assets/banner-1.jpg')
         },
         {
           desc: '',
-          src: require('@/assets/banner-2.jpg')
+          url: '',
+          pic: require('@/assets/banner-2.jpg')
         },
         {
           desc: '',
-          src: require('@/assets/banner-3.jpg')
+          url: '',
+          pic: require('@/assets/banner-3.jpg')
         },
         {
           desc: '',
-          src: require('@/assets/banner-4.jpg')
+          url: '',
+          pic: require('@/assets/banner-4.jpg')
         }
       ],
       grids: [
         {
           icon: 'gem-o',
           text: '珍藏',
-          to: { name: 'Gem', query: { index: 'gem' } },
+          // link: { name: 'Gem', query: { index: 'gem' } },
           dot: false
         },
         {
           icon: 'fire-o',
           text: '热门',
-          to: { name: 'Fire', query: { index: 'fire' } },
+          link: { name: 'Fire', query: { index: 'fire' } },
           dot: false
         },
         {
           icon: 'service-o',
           text: '服务',
-          to: { name: 'Service', query: { index: 'service' } },
+          // link: { name: 'Service', query: { index: 'service' } },
           dot: false
         },
         {
           icon: 'user-o',
           text: '关于',
-          to: { name: 'About' },
+          link: { name: 'About' },
           dot: false
         }
       ]
     }
   },
-  created() {}
+  created() {},
+  methods: {
+    _onClick({ link, text }) {
+      if (link) {
+        this.$router.replace(link)
+      } else {
+        this.$toast.fail(`《${text}》功能还未开发`)
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
+.swipe {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  &-item {
+    background-position: center;
+    background-size: cover;
+    background-color: #aaddcc;
+    height: 100%;
+  }
+}
 .swipe-wrap {
   height: 200px;
   position: relative;
