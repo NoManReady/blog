@@ -75,6 +75,12 @@
       <section class="user-desc">
         <p class="c-warning">夫唯不争，故天下莫能与之争</p>
       </section>
+      <!-- <template v-if="musicInfo"> -->
+      <!-- <audio :src="musicInfo.mp3_url" controls ref="audio"></audio> -->
+      <div class="canves-container" style="height:300px;">
+        <canvas id="canvas"></canvas>
+      </div>
+      <!-- </template> -->
       <div @click="_onBack" class="back-btn" v-if="!$store.getters.is_qiankun">
         <van-icon class="fs20" name="arrow-left" />
       </div>
@@ -84,6 +90,7 @@
 <script>
 import { Tag, Divider, Icon } from 'vant'
 import Ball from '@/utils/ball'
+import Audio from '@/utils/audio'
 export default {
   name: 'AppAbout',
   components: {
@@ -106,8 +113,13 @@ export default {
           label: 'Javascript',
           type: 'success'
         }
-      ]
+      ],
+      musicInfo: null,
+      audio: null
     }
+  },
+  created() {
+    // this._getMusic()
   },
   mounted() {
     new Ball({
@@ -118,15 +130,27 @@ export default {
       BALL_SIZE: 15,
       BALL_INPACT: 5
     })
+    this.audio = new Audio()
+    this._getMusic()
   },
   methods: {
     _onBack() {
       this.$router.replace({ name: 'Home' })
+    },
+    async _getMusic() {
+      try {
+        // let _result = await this.$fetch('/music/url?id=1396973729')
+        // debugger
+        this.audio._loadMusicByUrl('https://v1.alapi.cn/api/music/url?id=1396973729')
+      } catch (error) {}
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.app-about {
+  padding-bottom: 20px;
+}
 .main-tit {
   font-size: 26px;
   box-shadow: 0 0 5px #ccc;

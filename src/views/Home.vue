@@ -77,7 +77,7 @@ export default {
   methods: {
     _onClick({ link, text }) {
       if (link) {
-        this.$router.replace(link)
+        this.$router.push(link)
       } else {
         this.$toast.fail(`《${text}》功能还未开发`)
       }

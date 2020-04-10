@@ -6,6 +6,8 @@ import store from "./store";
 import '@/style/index.scss'
 import 'animate.css'
 
+import fetch from '@/utils/fetch'
+
 Vue.config.productionTip = false;
 
 let instance = null;
@@ -18,6 +20,12 @@ import VueLazyLoad from 'vue-lazyload'
 import lazy_img from './assets/loading.gif'
 Vue.use(VueLazyLoad, {
   loading: lazy_img
+})
+
+Object.defineProperties(Vue.prototype, {
+  $fetch: {
+    value: fetch
+  }
 })
 
 export async function bootstrap(props) {

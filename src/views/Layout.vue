@@ -5,7 +5,12 @@
     </transition>
     <template v-if="showTab">
       <van-tabbar v-model="tabbarModel">
-        <van-tabbar-item :key="tab.name" @click.native="_onClickTab(tab)" v-bind="tab" v-for="tab in tabbars.filter(t=>t.name!=='home'||(t.name==='home'&&!is_qiankun))">{{tab.label}}</van-tabbar-item>
+        <van-tabbar-item
+          :key="tab.name"
+          @click.native="_onClickTab(tab)"
+          v-bind="tab"
+          v-for="tab in tabbars.filter(t=>t.name!=='home'||(t.name==='home'&&!is_qiankun))"
+        >{{tab.label}}</van-tabbar-item>
       </van-tabbar>
     </template>
   </div>
@@ -80,12 +85,15 @@ export default {
   left: 0;
   right: 0;
   overflow: hidden;
+  overflow-y: auto;
   .has-tabbar {
     padding-bottom: 60px;
   }
   &-inner {
     position: absolute;
-    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    flex: 1;
     width: 100%;
   }
 }
