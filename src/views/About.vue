@@ -74,10 +74,11 @@
       </section>
       <section class="user-desc">
         <p class="c-warning">夫唯不争，故天下莫能与之争</p>
+        <p class="fc-9 mt10" v-if="musicInfo">{{musicInfo.name}}--{{musicInfo.user_name}}</p>
       </section>
       <!-- <template v-if="musicInfo"> -->
       <!-- <audio :src="musicInfo.mp3_url" controls ref="audio"></audio> -->
-      <div class="canves-container" style="height:300px;">
+      <div class="canves-container">
         <canvas id="canvas"></canvas>
       </div>
       <!-- </template> -->
@@ -115,11 +116,13 @@ export default {
         }
       ],
       musicInfo: null,
-      audio: null
+      audio: null,
+      musicList: [],
+      curIndex: 0
     }
   },
   created() {
-    // this._getMusic()
+    this._getMusic()
   },
   mounted() {
     new Ball({
@@ -131,18 +134,51 @@ export default {
       BALL_INPACT: 5
     })
     this.audio = new Audio()
-    this._getMusic()
+    // this._getMusic()
+    this._getPlayList()
+    this.$on('hook:beforeDestroy', () => {
+      console.log('out')
+      this.audio._destoryMusic()
+    })
   },
   methods: {
     _onBack() {
       this.$router.replace({ name: 'Home' })
     },
-    async _getMusic() {
+    async _getPlayList() {
       try {
-        // let _result = await this.$fetch('/music/url?id=1396973729')
-        // debugger
-        this.audio._loadMusicByUrl('https://v1.alapi.cn/api/music/url?id=1396973729')
+        let _result = await this.$fetch('/music/playlist?id=2948171497')
+        this.musicList = Object.freeze(_result.playlist)
+        this._getMusic()
       } catch (error) {}
+    },
+    _randomIndex() {
+      this.curIndex = Math.floor(Math.random() * this.musicList.length)
+    },
+    async _getMusic() {
+      this._randomIndex()
+      try {
+        let _cur = this.musicList[this.curIndex]
+        if (!_cur) {
+          return
+        }
+        this.musicInfo = _cur
+        let _result = await this.$fetch(
+          `/music/url?id=${_cur.id}&format=json`,
+          null,
+          {
+            isSilence: true
+          }
+        )
+        if (_result.url) {
+          this.audio._loadMusicByUrl(_result.url)
+        } else {
+          this._getMusic()
+        }
+      } catch (error) {
+        console.log('Get music error.', error)
+        this._getMusic()
+      }
     }
   }
 }
@@ -200,5 +236,18 @@ export default {
   left: 3%;
   top: 3%;
   position: absolute;
+}
+.canves-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 300px;
+  #canvas {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
